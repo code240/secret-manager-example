@@ -12,3 +12,9 @@ Route::get('/user', function (Request $request) {
 
 
 Route::get('/get/user', [ApiController::class, 'index']);
+
+
+
+Route::get('/testing', function (Request $request) {
+    return "<h1>Test Page</h1>";
+});

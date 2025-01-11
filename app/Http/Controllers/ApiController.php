@@ -7,14 +7,12 @@ use Illuminate\Http\Request;
 
 class ApiController extends Controller
 {
-    //
     public function index(Request $request) {
 
-        $envType = env('USER_KEY','none');
-        $servicemanager =  new SecretManagerService();
-        $secrets = $servicemanager->getSecret(env('SECRET_NAME'));
+        $secretManager = new SecretManagerService();
+        $secrets = $secretManager->getSecret('MY_TEST_SECRET');
 
-        dd($secrets);
+        $envType = $secrets['USER_KEY'] ?? 'none';
 
         return [
             'status' => true,
