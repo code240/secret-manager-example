@@ -1,0 +1,31 @@
+name: Deploy Laravel to EC2
+
+on:
+  push:
+    branches:
+      - main  # Deploy when changes are pushed to the 'main' branch
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
+
+      - name: Set up SSH
+        uses: webfactory/ssh-agent@v0.5.3
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+      - name: Deploy to EC2
+        run: |
+          ssh -o StrictHostKeyChecking=no ${{ secrets.DEPLOY_USER }}@${{ secrets.AWS_SERVER_IP }} << 'EOF'
+            cd ${{ secrets.DEPLOY_PATH }}
+            git pull origin main
+            composer install --no-interaction --prefer-dist
+            php artisan config:cache
+            php artisan route:cache
+            php artisan storage:link
+            sudo systemctl restart nginx
+          EOF
