@@ -30,7 +30,7 @@ jobs:
             sudo chmod -R 775 storage bootstrap/cache
             sudo chown -R www-data:www-data storage bootstrap/cache
 
-            sudo git pull origin main
+            sudo git pull origin master
 
             sudo php artisan config:clear
             sudo php artisan config:cache
