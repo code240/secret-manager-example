@@ -31,7 +31,7 @@ jobs:
             sudo chown -R www-data:www-data storage bootstrap/cache
 
             sudo git pull origin master
-            sudo composer update
+            sudo composer update --no-interaction --optimize-autoloader --no-dev
             sudo php artisan config:clear
             sudo php artisan config:cache
             sudo php artisan route:clear
