@@ -31,12 +31,12 @@ jobs:
             sudo chown -R www-data:www-data storage bootstrap/cache
 
             sudo git pull origin master
-
+            sudo composer update
             sudo php artisan config:clear
             sudo php artisan config:cache
             sudo php artisan route:clear
             sudo php artisan route:cache
-
+            sudo chmod -R 777 storage bootstrap/cache
             # Restart the web server
             sudo systemctl restart nginx
 
