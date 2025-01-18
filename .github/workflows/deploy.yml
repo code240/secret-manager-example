@@ -21,15 +21,23 @@ jobs:
       - name: Deploy to EC2
         run: |
           echo "Deployment started"
-          sudo ssh -o StrictHostKeyChecking=no ${{ secrets.DEPLOY_USER }}@${{ secrets.AWS_SERVER_IP }} << 'EOF'
-            cd /var/www/html/secret-manager
-            sudo chmod -R 777 ./storage
-            sudo chmod -R 777 ./bootstrap
-            sudo git pull origin main
-            sudo composer update
-            sudo php artisan config:cache
-            sudo php artisan route:cache
-            sudo systemctl restart nginx
-            echo "Deployed Successfully"
+          ssh -o StrictHostKeyChecking=no ${{ secrets.DEPLOY_USER }}@${{ secrets.AWS_SERVER_IP }} << 'EOF'
+            echo "Starting deployment on EC2..."
 
+            cd /var/www/html/secret-manager
+
+            chmod -R 775 storage bootstrap/cache
+            chown -R www-data:www-data storage bootstrap/cache
+
+            sudo git pull origin main
+
+            sudo php artisan config:clear
+            sudo php artisan config:cache
+            sudo php artisan route:clear
+            sudo php artisan route:cache
+
+            # Restart the web server
+            sudo systemctl restart nginx
+
+            echo "Deployed Successfully"
           EOF
