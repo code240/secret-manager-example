@@ -25,6 +25,7 @@ jobs:
             echo "Starting deployment on EC2..."
 
             cd /var/www/html/secret-manager
+            sudo git config --global --add safe.directory /var/www/html/secret-manager
 
             sudo chmod -R 775 storage bootstrap/cache
             sudo chown -R www-data:www-data storage bootstrap/cache
